@@ -6,26 +6,21 @@ import type { CoffeeDonateFormProps } from "../CoffeeDonateCard/CoffeeDonateCard
 interface NumberCircleProps {
   isSelected: boolean;
   number: number;
-  setValue: UseFormSetValue<CoffeeDonateFormProps>;
-  setIsSelected: Dispatch<React.SetStateAction<number>>;
+  handleCoffeesChange: (numOfCoffees: number) => void;
 }
 
 export default function NumberCircle({
   isSelected,
   number,
-  setValue,
-  setIsSelected,
+
+  handleCoffeesChange,
 }: NumberCircleProps) {
-  const handleClick = () => {
-    setValue("amount", number);
-    setIsSelected(number);
-  };
   return (
     <div
       className={`flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border-[1.5px] border-green-500 ${
         isSelected ? "bg-green-500" : "bg-white"
       }`}
-      onClick={handleClick}
+      onClick={() => handleCoffeesChange(number)}
     >
       <span
         className={`text-lg font-semibold ${

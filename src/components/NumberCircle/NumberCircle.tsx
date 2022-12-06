@@ -1,8 +1,3 @@
-import React from "react";
-import type { Dispatch } from "react";
-import type { UseFormSetValue } from "react-hook-form";
-import type { CoffeeDonateFormProps } from "../CoffeeDonateCard/CoffeeDonateCard";
-
 interface NumberCircleProps {
   isSelected: boolean;
   number: number;

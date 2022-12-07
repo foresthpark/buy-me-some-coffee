@@ -15,7 +15,7 @@
     "jsx": "preserve",
     "incremental": true,
     "noUnusedLocals": false,
-    "noUncheckedIndexedAccess": true,
+    "noUncheckedIndexedAccess": false,
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]

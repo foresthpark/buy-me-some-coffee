@@ -1,5 +1,7 @@
 import { ONE_COFFEE_PRICE } from "@/constants/constants";
-import React, { useState } from "react";
+import axios from "axios";
+import { useRouter } from "next/router";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import NumberCircle from "../NumberCircle/NumberCircle";
 
@@ -12,18 +14,32 @@ export interface CoffeeDonateFormProps {
 }
 
 export default function CoffeeDonateCard() {
-  const [isSelected, setIsSelected] = useState(1);
+  const router = useRouter();
+  const [, setIsSelected] = useState(1);
   const [currentCoffees, setCurrentCoffees] = useState(1);
 
-  const { register, handleSubmit, setValue, getValues } =
-    useForm<CoffeeDonateFormProps>({
-      defaultValues: {
-        coffees: 1,
-      },
+  const { register, handleSubmit, setValue } = useForm<CoffeeDonateFormProps>({
+    defaultValues: {
+      coffees: 1,
+    },
+  });
+
+  const onSubmit = async (data: CoffeeDonateFormProps) => {
+    const response = await axios.post("/api/checkout", {
+      quantity: currentCoffees,
+      name: data.name,
+      message: data.message,
     });
 
-  const onSubmit = (data: CoffeeDonateFormProps) => {
-    console.log("🚀 ~ file: CoffeeDonateCard.tsx:26 ~ onSubmit ~ data", data);
+    if (response.status !== 200) {
+      console.log("Error");
+      alert("Error");
+      return;
+    }
+
+    const url = response.data.url;
+
+    return router.push(url);
   };
 
   const handleCoffeesChange = (numOfCoffees: number) => {
@@ -33,11 +49,8 @@ export default function CoffeeDonateCard() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="space-y-4 p-4">
-        <h2 className="text-xl font-semibold">
-          Buy Forest a coffee...or five 
-        </h2>
+    <div className="w-full space-y-4 p-4">
+      <form onSubmit={handleSubmit(onSubmit)}>
         <div className="flex flex-row items-center justify-center space-x-3 rounded-lg border-[0.4px] border-green-400 bg-green-100 py-6">
           <span className="text-5xl">☕️</span>
           <span>x</span>
@@ -77,7 +90,7 @@ export default function CoffeeDonateCard() {
             Support ${(Number(currentCoffees) * ONE_COFFEE_PRICE) / 100}
           </button>
         </div>
-      </div>
-    </form>
+      </form>
+    </div>
   );
 }
